@@ -166,6 +166,8 @@ class GrammarChecker {
      */
     countWords(text) {
         // Use DOMParser to safely parse HTML and extract text
+        // This is safe because: 1) The parsed doc is isolated and never added to DOM
+        // 2) We only extract textContent (not innerHTML), which is always safe
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
         const cleanText = doc.body.textContent || '';
@@ -178,6 +180,8 @@ class GrammarChecker {
      */
     getStats(text) {
         // Use DOMParser to safely parse HTML and extract text
+        // This is safe because: 1) The parsed doc is isolated and never added to DOM
+        // 2) We only extract textContent (not innerHTML), which is always safe
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
         const cleanText = doc.body.textContent || '';
