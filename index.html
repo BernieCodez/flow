@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow - Fast Text Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="app-title">Flow</h1>
+                <div class="project-selector">
+                    <select id="projectSelect" class="project-dropdown">
+                        <option value="">Select Project</option>
+                    </select>
+                    <button id="newProjectBtn" class="btn btn-small">+ New Project</button>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Offline Ready</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar - Document List -->
+            <aside class="sidebar-left">
+                <div class="sidebar-header">
+                    <h2>Documents</h2>
+                    <button id="newDocBtn" class="btn btn-small">+ New</button>
+                </div>
+                <div class="document-list" id="documentList">
+                    <div class="empty-state">
+                        <p>No documents yet</p>
+                        <p class="text-muted">Create a project and add documents</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Editor Area -->
+            <main class="editor-container">
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <select id="fontFamily" class="toolbar-select" title="Font Family">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Comic Sans MS">Comic Sans MS</option>
+                        </select>
+                        <select id="fontSize" class="toolbar-select" title="Font Size">
+                            <option value="12">12</option>
+                            <option value="14">14</option>
+                            <option value="16" selected>16</option>
+                            <option value="18">18</option>
+                            <option value="20">20</option>
+                            <option value="24">24</option>
+                            <option value="28">28</option>
+                            <option value="32">32</option>
+                        </select>
+                    </div>
+                    
+                    <div class="toolbar-group">
+                        <button id="boldBtn" class="toolbar-btn" title="Bold (Ctrl+B)">
+                            <strong>B</strong>
+                        </button>
+                        <button id="italicBtn" class="toolbar-btn" title="Italic (Ctrl+I)">
+                            <em>I</em>
+                        </button>
+                        <button id="underlineBtn" class="toolbar-btn" title="Underline (Ctrl+U)">
+                            <u>U</u>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <input type="color" id="textColor" class="toolbar-color" title="Text Color" value="#000000">
+                        <input type="color" id="bgColor" class="toolbar-color" title="Background Color" value="#ffffff">
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="alignLeftBtn" class="toolbar-btn" title="Align Left">⬅</button>
+                        <button id="alignCenterBtn" class="toolbar-btn" title="Align Center">↔</button>
+                        <button id="alignRightBtn" class="toolbar-btn" title="Align Right">➡</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="indentBtn" class="toolbar-btn" title="Indent">→</button>
+                        <button id="outdentBtn" class="toolbar-btn" title="Outdent">←</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="bulletListBtn" class="toolbar-btn" title="Bullet List">• List</button>
+                        <button id="numberListBtn" class="toolbar-btn" title="Number List">1. List</button>
+                    </div>
+
+                    <div class="toolbar-group ml-auto">
+                        <button id="saveBtn" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <!-- Document Title -->
+                <div class="document-header">
+                    <input type="text" id="documentTitle" class="document-title-input" placeholder="Untitled Document">
+                </div>
+
+                <!-- Editor -->
+                <div id="editor" class="editor" contenteditable="true" spellcheck="true">
+                    <p>Start typing your document here...</p>
+                </div>
+            </main>
+
+            <!-- Sidebar - Grammar Tools -->
+            <aside class="sidebar-right">
+                <div class="sidebar-header">
+                    <h2>Grammar Tools</h2>
+                </div>
+                <div class="grammar-panel">
+                    <button id="instantCorrectBtn" class="btn btn-primary btn-block">
+                        ⚡ Instant Correct All
+                    </button>
+                    
+                    <div class="grammar-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Issues Found:</span>
+                            <span class="stat-value" id="issuesCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Word Count:</span>
+                            <span class="stat-value" id="wordCount">0</span>
+                        </div>
+                    </div>
+
+                    <div class="grammar-suggestions" id="grammarSuggestions">
+                        <div class="empty-state">
+                            <p>No grammar issues detected</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sync-config">
+                    <h3>Sync Configuration</h3>
+                    <p class="text-muted">Configure cross-device syncing (future feature)</p>
+                    <input type="text" id="syncEndpoint" class="input-field" placeholder="Sync Server URL" disabled>
+                    <button id="configureSyncBtn" class="btn btn-secondary btn-block" disabled>Configure Sync</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Project</h2>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="projectName">Project Name:</label>
+                <input type="text" id="projectName" class="input-field" placeholder="Enter project name">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProjectModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createProject()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="grammar.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
