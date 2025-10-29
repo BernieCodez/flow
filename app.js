@@ -383,11 +383,16 @@ function instantCorrectAll() {
     const text = editor.innerText;
     const correctedText = grammarChecker.correctAll(text);
     
-    // Simple replacement: update the text content
-    // Note: This preserves paragraph structure but loses some rich formatting
-    // For production, consider a more sophisticated DOM-based approach
+    // Sanitize by creating text nodes (prevents XSS)
+    // Split into paragraphs and create proper DOM structure
     const paragraphs = correctedText.split('\n\n');
-    editor.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+    editor.innerHTML = ''; // Clear editor
+    
+    paragraphs.forEach(paragraphText => {
+        const p = document.createElement('p');
+        p.textContent = paragraphText; // Using textContent prevents XSS
+        editor.appendChild(p);
+    });
     
     // Save and update
     saveDocument(false);

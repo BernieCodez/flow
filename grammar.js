@@ -165,16 +165,22 @@ class GrammarChecker {
      * Count words in text
      */
     countWords(text) {
-        const cleanText = text.replace(/<[^>]*>/g, '').trim();
-        if (!cleanText) return 0;
-        return cleanText.split(/\s+/).filter(word => word.length > 0).length;
+        // Create a temporary DOM element to safely extract text content
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text;
+        const cleanText = tempDiv.textContent || tempDiv.innerText || '';
+        if (!cleanText.trim()) return 0;
+        return cleanText.trim().split(/\s+/).filter(word => word.length > 0).length;
     }
 
     /**
      * Get text statistics
      */
     getStats(text) {
-        const cleanText = text.replace(/<[^>]*>/g, '');
+        // Create a temporary DOM element to safely extract text content
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text;
+        const cleanText = tempDiv.textContent || tempDiv.innerText || '';
         const words = cleanText.trim().split(/\s+/).filter(w => w.length > 0);
         const sentences = cleanText.split(/[.!?]+/).filter(s => s.trim().length > 0);
         const characters = cleanText.length;
