@@ -110,6 +110,8 @@ function handleKeyboardShortcuts(e) {
 }
 
 // Execute formatting command
+// Note: document.execCommand is deprecated but still widely supported
+// TODO: Consider migrating to Selection API for better future compatibility
 function execCommand(command, value = null) {
     document.execCommand(command, false, value);
     document.getElementById('editor').focus();
@@ -179,7 +181,7 @@ async function createProject() {
 // Handle project change
 async function handleProjectChange() {
     const projectSelect = document.getElementById('projectSelect');
-    const projectId = parseInt(projectSelect.value);
+    const projectId = parseInt(projectSelect.value, 10);
     
     if (!projectId) {
         currentProject = null;
@@ -376,15 +378,16 @@ function instantCorrectAll() {
     }
     
     const editor = document.getElementById('editor');
-    const text = editor.innerText;
     
+    // Get text and apply corrections
+    const text = editor.innerText;
     const correctedText = grammarChecker.correctAll(text);
     
-    // Replace text while preserving formatting
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = editor.innerHTML;
-    tempDiv.innerText = correctedText;
-    editor.innerHTML = tempDiv.innerHTML;
+    // Simple replacement: update the text content
+    // Note: This preserves paragraph structure but loses some rich formatting
+    // For production, consider a more sophisticated DOM-based approach
+    const paragraphs = correctedText.split('\n\n');
+    editor.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
     
     // Save and update
     saveDocument(false);

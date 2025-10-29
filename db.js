@@ -18,7 +18,7 @@ class FlowDB {
             const request = indexedDB.open(this.dbName, this.version);
 
             request.onerror = () => {
-                console.error('Database failed to open');
+                console.error('Database failed to open:', request.error);
                 reject(request.error);
             };
 

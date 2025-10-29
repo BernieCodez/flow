@@ -97,10 +97,9 @@ class GrammarChecker {
 
         // Check grammar rules
         this.rules.forEach(rule => {
-            let match;
-            const regex = new RegExp(rule.pattern);
-            while ((match = regex.exec(text)) !== null) {
-                if (rule.fix) {
+            if (rule.fix) {
+                let match;
+                while ((match = rule.pattern.exec(text)) !== null) {
                     issues.push({
                         type: 'grammar',
                         original: match[0],
@@ -110,6 +109,10 @@ class GrammarChecker {
                         position: match.index,
                         description: rule.description
                     });
+                }
+                // Reset lastIndex for global patterns
+                if (rule.pattern.global) {
+                    rule.pattern.lastIndex = 0;
                 }
             }
         });
