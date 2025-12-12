@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow - Student Collaboration Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">
+                    <i class="fas fa-pencil-alt"></i>
+                    Flow
+                </h1>
+                <input type="text" id="documentTitle" class="document-title" value="Untitled Document" placeholder="Document Title">
+            </div>
+            <div class="header-right">
+                <button class="btn-save" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+                <button class="btn-export" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    Export
+                </button>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <!-- Undo/Redo -->
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="undoBtn" title="Undo">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="toolbar-btn" id="redoBtn" title="Redo">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Font Family -->
+            <div class="toolbar-group">
+                <select id="fontFamily" class="toolbar-select">
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Inter" selected>Inter</option>
+                </select>
+            </div>
+
+            <!-- Font Size -->
+            <div class="toolbar-group">
+                <select id="fontSize" class="toolbar-select">
+                    <option value="1">Small</option>
+                    <option value="2">Normal</option>
+                    <option value="3" selected>Medium</option>
+                    <option value="4">Large</option>
+                    <option value="5">Extra Large</option>
+                    <option value="6">Huge</option>
+                    <option value="7">Maximum</option>
+                </select>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Text Formatting -->
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="boldBtn" title="Bold (Ctrl+B)">
+                    <i class="fas fa-bold"></i>
+                </button>
+                <button class="toolbar-btn" id="italicBtn" title="Italic (Ctrl+I)">
+                    <i class="fas fa-italic"></i>
+                </button>
+                <button class="toolbar-btn" id="underlineBtn" title="Underline (Ctrl+U)">
+                    <i class="fas fa-underline"></i>
+                </button>
+                <button class="toolbar-btn" id="strikeBtn" title="Strikethrough">
+                    <i class="fas fa-strikethrough"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Text Color -->
+            <div class="toolbar-group">
+                <div class="color-picker-wrapper">
+                    <button class="toolbar-btn" id="textColorBtn" title="Text Color">
+                        <i class="fas fa-font"></i>
+                        <span class="color-indicator" id="textColorIndicator"></span>
+                    </button>
+                    <input type="color" id="textColor" class="color-input" value="#000000">
+                </div>
+                <div class="color-picker-wrapper">
+                    <button class="toolbar-btn" id="highlightBtn" title="Highlight Color">
+                        <i class="fas fa-highlighter"></i>
+                        <span class="color-indicator" id="highlightColorIndicator"></span>
+                    </button>
+                    <input type="color" id="highlightColor" class="color-input" value="#ffff00">
+                </div>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Alignment -->
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="alignLeftBtn" title="Align Left">
+                    <i class="fas fa-align-left"></i>
+                </button>
+                <button class="toolbar-btn" id="alignCenterBtn" title="Align Center">
+                    <i class="fas fa-align-center"></i>
+                </button>
+                <button class="toolbar-btn" id="alignRightBtn" title="Align Right">
+                    <i class="fas fa-align-right"></i>
+                </button>
+                <button class="toolbar-btn" id="alignJustifyBtn" title="Justify">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Lists -->
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="orderedListBtn" title="Numbered List">
+                    <i class="fas fa-list-ol"></i>
+                </button>
+                <button class="toolbar-btn" id="unorderedListBtn" title="Bullet List">
+                    <i class="fas fa-list-ul"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Line Spacing -->
+            <div class="toolbar-group">
+                <select id="lineSpacing" class="toolbar-select">
+                    <option value="1">Single</option>
+                    <option value="1.15">1.15</option>
+                    <option value="1.5" selected>1.5</option>
+                    <option value="2">Double</option>
+                    <option value="2.5">2.5</option>
+                    <option value="3">Triple</option>
+                </select>
+            </div>
+
+            <div class="toolbar-separator"></div>
+
+            <!-- Clear Formatting -->
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="clearFormatBtn" title="Clear Formatting">
+                    <i class="fas fa-remove-format"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor -->
+        <div class="editor-wrapper">
+            <div class="editor-container">
+                <div id="editor" class="editor" contenteditable="true" spellcheck="true">
+                    <p>Start typing your document here...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="wordCount">0 words</span>
+                <span class="status-separator">|</span>
+                <span id="charCount">0 characters</span>
+            </div>
+            <div class="status-right">
+                <span id="lastSaved">Never saved</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
