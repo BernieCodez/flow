@@ -263,7 +263,9 @@ exportBtn.addEventListener('click', () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.html`;
+    // Replace only characters that are invalid in filenames
+    const sanitizedTitle = title.replace(/[<>:"/\\|?*]/g, '_');
+    a.download = `${sanitizedTitle}.html`;
     a.click();
     URL.revokeObjectURL(url);
     
@@ -298,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Welcome message for first-time users
     if (!localStorage.getItem('flowDocument')) {
-        editor.innerHTML = '<p style="color: #6c757d; font-style: italic;">Welcome to Flow! Start typing your document here. All your formatting tools are in the toolbar above. Your work is automatically saved as you type. 📝</p>';
+        editor.innerHTML = '<p class="welcome-message">Welcome to Flow! Start typing your document here. All your formatting tools are in the toolbar above. Your work is automatically saved as you type. 📝</p>';
     }
 });
 

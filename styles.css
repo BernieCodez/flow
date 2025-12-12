@@ -271,6 +271,12 @@ body {
     margin-bottom: 4px;
 }
 
+/* Welcome Message */
+.editor .welcome-message {
+    color: #6c757d;
+    font-style: italic;
+}
+
 /* Status Bar */
 .status-bar {
     display: flex;
