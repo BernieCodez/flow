@@ -1,0 +1,9 @@
+import * as cheerio from "cheerio";
+import sanitizeHtml from "sanitize-html";
+import { z } from "zod";
+import { assertPublicUrl } from "@/lib/source-security";
+import { scoreSource } from "@/lib/credibility";
+
+export async function POST(request){
+ try{const {url:raw}=z.object({url:z.string().url().max(2048)}).parse(await request.json());const url=await assertPublicUrl(raw);const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);const response=await fetch(url,{signal:controller.signal,redirect:"error",headers:{"user-agent":"Flow Student Research Tool/0.1"}});clearTimeout(timer);if(!response.ok)throw new Error(`Source returned ${response.status}`);const type=response.headers.get("content-type")||"";if(!type.includes("text/html"))throw new Error("Only HTML pages are supported in this version.");const html=await response.text();if(html.length>2_000_000)throw new Error("Source page is too large.");const $=cheerio.load(html);$("script,style,noscript,iframe,form,nav,footer").remove();const main=$("article").first().length?$("article").first():$("main").first().length?$("main").first():$("body");const title=$("meta[property='og:title']").attr("content")||$("title").text().trim()||url.hostname;const author=$("meta[name='author']").attr("content")||$("[rel='author']").first().text().trim();const date=$("meta[property='article:published_time']").attr("content")||$("time").first().attr("datetime");const safe=sanitizeHtml(main.html()||"",{allowedTags:["p","h1","h2","h3","h4","ul","ol","li","blockquote","strong","em","a"],allowedAttributes:{a:["href"]}});const credibility=scoreSource({url:url.toString(),author,date});return Response.json({url:url.toString(),title,publisher:url.hostname,author:author||null,publishedAt:date||null,contentHtml:safe,contentText:main.text().replace(/\s+/g," ").trim(),credibility});}catch(error){return Response.json({error:error.message||"Could not fetch source."},{status:400})}
+}
